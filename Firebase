@@ -1,0 +1,55 @@
+#Firebaseの動作検証で躓いた箇所
+##https://codelabs.developers.google.com/codelabs/firebase-ios-swift/?authuser=1#4
+##の、 「"rules":タブを追記してみましょう」で、どこにかけばいいかわからなかった
+
+    Firebaseコンソールで、Databaaseを選択。
+    「または Realtime Database を選択」で、データペースを作成
+    「テストモードで開始」を選択　※ロックモードも良さそう
+    ルールタプを選択する
+    タブ内は、以下の記載になっている
+        {
+            "rules": {
+                ".read": true,
+                ".write": true
+            }
+        }
+    以下に変更する
+        {
+            "rules": {
+                    "messages": {
+                        ".read": "auth != null",
+                        ".write": "auth != null"
+                    }
+            }
+        }
+
+-----------------------------
+#Databaseのルールを更新した後、別の機能を表示して、再度Databaseを開くと、ルールが初期化される。
+というか、毎回新規作成を求められる。
+
+    JSONインポートをしたら、新規作成を求められなくなった。
+
+        今回はサンブル環境で動かしていてJSONファイルが存在していたが、
+        新規開発のときはどうするのかは、謎。
+
+----------------------------
+#Remote Configで、then select Update then Publish Changes. の場所がわからない
+
+     fresh config をタッブすれば大丈夫
+
+
+----------------------------
+FireBaseCrashlyticsを使用しようとすると、Fabricに飛ばされ、
+「該当アプリは登録されていない」旨の表示になる
+
+    fabricのDashboardのCrashlytics内のinstallタブ通りに作業しないとだめ
+    https://fabric.io/kits/ios/crashlytics/install
+
+    Firebaseのドキュメントにも設定方法の記載があるが、不足している。
+
+----------------------------
+FireBaseCrashlyticsでCrushが拾えない
+
+    デバッグモードだとCrushシグナルが発行されない。
+    シミュレータにRunでアプリをインストールしたら、Stopを押して、接続を切る必要がある
+
